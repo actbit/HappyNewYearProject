@@ -1,6 +1,10 @@
 ﻿@page "/"
+<div id="mainbody">
+    <p>来年まで</p>
 
-<h1 id="mainbody">@Data</h1>
+    <p>@Data</p>
+
+</div>
 @implements IDisposable
 @using System.Timers;
 @inject IJSRuntime JSRuntime
@@ -22,9 +26,12 @@
     private void Timer_Elapsed(object sender, ElapsedEventArgs e)
     {
         DateTime dateTime = new DateTime(DateTime.Now.Year+1, 1, 1, 0, 0, 0, DateTimeKind.Local);
-        ;
-        Data ="来年まで"+ (dateTime - DateTime.Now).ToString();
+        
+        
+        var data = (dateTime - DateTime.Now);
+        Data = data.ToString(@"dd'日'hh'時間'mm'分'ss'秒'");
         StateHasChanged();
+
     }
     public void Dispose()
     {

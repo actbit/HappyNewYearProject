@@ -1,9 +1,10 @@
 ﻿#mainbody {
     margin:20%;
     text-align:center;
-    background-color:blue;
-    border:solid 3px #000000;
-    padding:10%;
+    background-color:lightgrey;
+    border:solid 3px #808080;
+    font-size:4em;
+    padding:5%;
 }
 body {
     margin:10%;
