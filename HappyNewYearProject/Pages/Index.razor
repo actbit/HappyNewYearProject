@@ -1,7 +1,35 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+<p>@Data</p>
+@implements IDisposable
+@using System.Timers;
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@code{
+    [Parameter]
+    public string Data { set; get; } = "aaaaaa";
+    Timer Timer1 = new Timer(100);
+    protected override void OnInitialized()
+    {
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+        Timer1.Elapsed += Timer_Elapsed;
+        Timer1.AutoReset = true;
+        Timer1.Enabled = true;
+        Timer1.Start();
+
+    }
+    private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+    {
+        DateTime dateTime = new DateTime(DateTime.Now.Year+1, 1, 1, 0, 0, 0, DateTimeKind.Local);
+        ;
+        Data ="来年まで"+ (dateTime - DateTime.Now).ToString();
+        StateHasChanged();
+    }
+    public void Dispose()
+    {
+        Timer1.Stop();
+        Timer1.Dispose();
+
+    }
+}
