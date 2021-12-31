@@ -1,0 +1,10 @@
+﻿#mainbody {
+    margin:20%;
+    text-align:center;
+    background-color:blue;
+    border:solid 3px #000000;
+    padding:10%;
+}
+body {
+    margin:10%;
+}
