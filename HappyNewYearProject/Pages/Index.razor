@@ -2,8 +2,11 @@
 <div id="mainbody">
     <p>@End</p>
 
-    <p>@Data</p>
-    <button class="btn btn-primary" @onclick="IncrementCount">残り時間を読み上げる</button>
+    <p id="bigbody">@Data</p>
+    <p>@Now</p>
+
+    <button class="btn btn-primary" @onclick="IncrementCount">残り時間の読み上げを開始する</button>
+
 </div>
 @implements IDisposable
 @using System.Timers;
@@ -13,7 +16,10 @@
     [Parameter]
     public string Data { set; get; } = "aaaaaa";
     Timer Timer1 = new Timer(100);
+    [Parameter]
     public string End { get; set; }
+    [Parameter]
+    public string Now { get; set; }
     protected override void OnInitialized()
     {
 
@@ -55,6 +61,8 @@
     }
     bool end = true;
     TimeSpan TimeSpan;
+    double af = -1;
+    bool end2 = true;
     private void Timer_Elapsed(object sender, ElapsedEventArgs e)
     {
         DateTime dateTime = new DateTime(DateTime.Now.Year+1, 1, 1, 0, 0, 0, DateTimeKind.Local);
@@ -65,6 +73,7 @@
         End = dateTime.Year.ToString()+"年まで";
         Data = data.ToString(@"dd'日'hh'時間'mm'分'ss'秒'");
         string outsting = "";
+        Now = DateTime.Now.ToString();
         if (TimeSpan.Days!=0)
         {
             outsting += TimeSpan.Days + "にち";
@@ -83,6 +92,7 @@
             outsting += TimeSpan.Seconds + "秒";
 
         }
+
         if (TimeSpan.Seconds == 0)
         {
             if (end == false)
@@ -90,13 +100,32 @@
                 JSRuntime.InvokeVoidAsync("ReadFunc", End + outsting);
                 end = true;
             }
-            else
-            {
-                end = false;
-            }
-        }
 
+        }
+        else
+        {
+            end = false;
+        }
+        if(Math.Round((double)TimeSpan.TotalSeconds) == 13&& Math.Round((double)TimeSpan.TotalSeconds) != af&&end2)
+        {
+            JSRuntime.InvokeVoidAsync("ReadFunc", End);
+            StateHasChanged();
+            end2 = false;
+        }
+        if (Math.Round((double)TimeSpan.TotalSeconds) == 0&& Math.Round((double)TimeSpan.TotalSeconds) != af)
+        {
+            JSRuntime.InvokeVoidAsync("ReadFunc", "ハッピーニューイヤー　本年もよろしくお願いいたします。");
+            af = Math.Round((double)TimeSpan.TotalSeconds);
+            StateHasChanged();
+            end2 = true;
+        }
+        else if (Math.Round((double)TimeSpan.TotalSeconds) <= 10 && Math.Round((double)TimeSpan.TotalSeconds) !=af)
+        {
+            JSRuntime.InvokeVoidAsync("ReadFunc", Math.Round((Double)TimeSpan.TotalSeconds).ToString());
+            af = Math.Round((double)TimeSpan.TotalSeconds);
+        }
         StateHasChanged();
+
 
     }
     public void Dispose()
