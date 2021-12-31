@@ -1,9 +1,9 @@
 ﻿@page "/"
 <div id="mainbody">
-    <p>来年まで</p>
+    <p>@End</p>
 
     <p>@Data</p>
-
+    <button class="btn btn-primary" @onclick="IncrementCount">残り時間を読み上げる</button>
 </div>
 @implements IDisposable
 @using System.Timers;
@@ -13,23 +13,89 @@
     [Parameter]
     public string Data { set; get; } = "aaaaaa";
     Timer Timer1 = new Timer(100);
+    public string End { get; set; }
     protected override void OnInitialized()
     {
 
 
+        StateHasChanged();
         Timer1.Elapsed += Timer_Elapsed;
         Timer1.AutoReset = true;
         Timer1.Enabled = true;
         Timer1.Start();
 
     }
+    private void IncrementCount()
+    {
+        string outsting = ""; ;
+        if (TimeSpan.Days != 0)
+        {
+            outsting += TimeSpan.Days + "にち";
+        }
+        if (TimeSpan.Hours != 0)
+        {
+            outsting += TimeSpan.Hours + "じかん";
+        }
+        if (TimeSpan.Minutes != 0)
+        {
+            outsting += TimeSpan.Minutes + "分";
+
+        }
+        if (TimeSpan.Seconds != 0)
+        {
+            outsting += TimeSpan.Seconds + "秒";
+
+        }
+        if (TimeSpan.Seconds == 0)
+        {
+
+        }
+        JSRuntime.InvokeVoidAsync("ReadFunc", End + outsting);
+
+    }
+    bool end = true;
+    TimeSpan TimeSpan;
     private void Timer_Elapsed(object sender, ElapsedEventArgs e)
     {
         DateTime dateTime = new DateTime(DateTime.Now.Year+1, 1, 1, 0, 0, 0, DateTimeKind.Local);
-        
-        
+
+
         var data = (dateTime - DateTime.Now);
+        TimeSpan = data;
+        End = dateTime.Year.ToString()+"年まで";
         Data = data.ToString(@"dd'日'hh'時間'mm'分'ss'秒'");
+        string outsting = "";
+        if (TimeSpan.Days!=0)
+        {
+            outsting += TimeSpan.Days + "にち";
+        }
+        if (TimeSpan.Hours != 0)
+        {
+            outsting += TimeSpan.Hours + "じかん";
+        }
+        if (TimeSpan.Minutes != 0)
+        {
+            outsting += TimeSpan.Minutes + "分";
+
+        }
+        if (TimeSpan.Seconds != 0)
+        {
+            outsting += TimeSpan.Seconds + "秒";
+
+        }
+        if (TimeSpan.Seconds == 0)
+        {
+            if (end == false)
+            {
+                JSRuntime.InvokeVoidAsync("ReadFunc", End + outsting);
+                end = true;
+            }
+            else
+            {
+                end = false;
+            }
+        }
+
         StateHasChanged();
 
     }

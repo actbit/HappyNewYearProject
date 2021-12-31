@@ -50,7 +50,51 @@
         }(window.location))
     </script>
     <!-- End Single Page Apps for GitHub Pages -->
+    <script>
+        function ReadFunc(word) {
+            //var msg = new SpeechSynthesisUtterance();
+            //msg.text = word;
+            //msg.lang = 'ja-JP';
+            //window.speechSynthesis.speak(msg);
 
+
+            //const uttr = new SpeechSynthesisUtterance(word)
+            //// 発言を再生 (発言キュー発言に追加)
+            //speechSynthesis.speak(uttr)
+
+            // テキストを取得
+            const text = word;
+
+            if ('speechSynthesis' in window) {
+
+                // 発言を設定 (必須)
+                const uttr = new SpeechSynthesisUtterance()
+
+                // テキストを設定 (必須)
+                uttr.text = word
+
+                // 言語を設定
+                uttr.lang = "ja-JP"
+
+                // 速度を設定
+                uttr.rate = 3
+
+                // 高さを設定
+                uttr.pitch = 1
+
+                // 音量を設定
+                uttr.volume = 1
+
+                // 発言を再生 (必須)
+                window.speechSynthesis.speak(uttr)
+
+            } else {
+                console.log('大変申し訳ありません。このブラウザは音声合成に対応していません。')
+            }
+            console.log(word);
+        }
+        
+    </script>
     <script src="_framework/blazor.webassembly.js"></script>
 </body>
 
