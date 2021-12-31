@@ -2,10 +2,13 @@
     margin:20%;
     text-align:center;
     background-color:lightgrey;
-    border:solid 3px #808080;
-    font-size:4em;
+    border:solid 1px #808080;
+    font-size:2em;
     padding:5%;
 }
+#bigbody {
+    font-size: 3em;
+}
 body {
-    margin:10%;
+    margin:5%;
 }
